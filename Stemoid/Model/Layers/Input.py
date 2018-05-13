@@ -10,3 +10,6 @@ class Input:
             print('Input shape not the same')
             return
         return x
+
+    def backward(self, dout):
+        return dout
