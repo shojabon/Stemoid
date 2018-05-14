@@ -6,6 +6,11 @@ class Input:
         pass
 
     def forward(self, x):
+        if x.ndim == 2:
+            if x.shape[1] != self.size[0]:
+                print('Input shape not the same')
+                return
+            return x
         if x.shape != self.size:
             print('Input shape not the same')
             return
