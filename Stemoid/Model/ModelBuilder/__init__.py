@@ -1,5 +1,8 @@
 import numpy as np
 
+from Stemoid.Model.LossFunctions.CrossEntropyError import CrossEntropyError
+from Stemoid.Model.Optimizers.SGD import SGD
+
 
 class ModelBuilder:
     
@@ -17,12 +20,12 @@ class ModelBuilder:
             self.first_done = True
         return self
 
-    def compile(self, weight_multiplier=0.01):
+    def compile(self, optimizer=SGD(),loss=CrossEntropyError(),starting_weight_multiplier=0.01,):
         self.model_shape.append(self.input.get_size())
         for x in self.model:
             self.model_shape.append(x.get_size())
         for x in range(len(self.model_shape) - 1):
-            self.model[x].compile(weight_multiplier * np.random.rand(self.model_shape[x], self.model_shape[x+1]),weight_multiplier * np.random.rand(self.model_shape[x+1]))
+            self.model[x].compile(starting_weight_multiplier * np.random.rand(self.model_shape[x], self.model_shape[x+1]),starting_weight_multiplier * np.random.rand(self.model_shape[x+1]))
 
     def p(self, input_data):
         input_data = self.input.forward(input_data)

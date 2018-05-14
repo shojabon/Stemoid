@@ -13,4 +13,5 @@ model.add(Affine(50, activation=ReLU()))
 model.add(Affine(10, activation=ReLU()))
 
 model.compile()
-print(model.p(np.array([1])))
+a = np.arange(-10, 10).reshape(1, 20)
+print(a.argmax(axis=1))
