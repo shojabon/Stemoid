@@ -9,7 +9,8 @@ from Stemoid.Model.ModelBuilder import ModelBuilder
 
 model = ModelBuilder()
 model.add(Input((1,)))
-model.add(Affine(50, optimizer=ReLU()))
-model.add(Affine(10, optimizer=ReLU()))
+model.add(Affine(50, activation=ReLU()))
+model.add(Affine(10, activation=ReLU()))
 
 model.compile()
+print(model.p(np.array([1])))
