@@ -35,12 +35,9 @@ class Affine:
         dx = dx.reshape(*self.original_shape)
         return dx
 
-
-    def influence_weights(self, gradient, learning_rate=0.01):
-        weights = gradient['weights']
-        bias = gradient['bias']
-        self.weights -= learning_rate * weights
-        self.bias -= learning_rate * bias
+    def set_weights(self, weights, bias):
+        self.weights = weights
+        self.bias = bias
 
     def get_size(self):
         return self.size
@@ -48,5 +45,3 @@ class Affine:
     def compile(self, first_layer, next_layer):
         self.weights = 0.01 * np.random.rand(first_layer, next_layer)
         self.bias = 0.01 * np.random.rand(next_layer)
-
-
