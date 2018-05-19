@@ -14,10 +14,9 @@ model.add(Affine(10))
 model.compile()
 
 for x in range(200000):
-    batch_mask = np.random.choice(100, 100)
+    batch_mask = np.random.choice(x_train.shape[0], 100)
     x_batch = x_train[batch_mask]
     t_batch = t_train[batch_mask]
     model.learn(x_batch, t_batch)
-    model.get_loss(x_batch, t_batch)
     if x % 1000 == 0:
-        print(model.get_accuracy(x_train, t_train))
+        print(model.get_accuracy(x_test, t_test))

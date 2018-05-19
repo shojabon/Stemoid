@@ -19,9 +19,11 @@ class Affine:
 
     def forward(self, input_data):
         self.original_shape = input_data.shape
+        input_data = input_data.reshape(input_data.shape[0], -1)
         self.input = input_data
         if self.ac is not None:
-            x = self.ac.forward(np.dot(input_data, self.weights) + self.bias)
+            a = np.dot(input_data, self.weights) + self.bias
+            x = self.ac.forward(a)
             return x
         x = np.dot(input_data, self.weights) + self.bias
         return x
@@ -43,5 +45,5 @@ class Affine:
         return self.size
 
     def compile(self, first_layer, next_layer):
-        self.weights = 0.01 * np.random.rand(first_layer, next_layer)
-        self.bias = 0.01 * np.random.rand(next_layer)
+        self.weights = 0.1 * np.random.rand(first_layer, next_layer)
+        self.bias = np.zeros(next_layer)

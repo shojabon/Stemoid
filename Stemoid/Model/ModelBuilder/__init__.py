@@ -5,7 +5,7 @@ from Stemoid.Model.Optimizers.SGD import SGD
 
 
 class ModelBuilder:
-    
+
     def __init__(self):
         self.model = []
         self.model_shape = []
@@ -22,15 +22,14 @@ class ModelBuilder:
             self.first_done = True
         return self
 
-    def compile(self, optimizer=SGD(),loss=SoftLoss()):
+    def compile(self, optimizer=SGD(), loss=SoftLoss()):
         self.model_shape.append(self.input.get_size())
         for x in self.model:
             self.model_shape.append(x.get_size())
         for x in range(len(self.model_shape) - 1):
-            self.model[x].compile(self.model_shape[x],self.model_shape[x+1])
+            self.model[x].compile(self.model_shape[x], self.model_shape[x + 1])
         self.loss = loss
         self.optimizer = optimizer
-
 
     def predict(self, input_data):
         input_data = self.input.forward(input_data)
@@ -50,26 +49,23 @@ class ModelBuilder:
         out = []
         for x in lista:
             dout = x.backward(dout)
-            out.append({'weights':x.doutWeights,
-                        'bias':x.doutBias})
+        for x in lista:
+            out.append({'weights': x.doutWeights,
+                        'bias': x.doutBias})
         out.reverse()
         return out
 
     def get_accuracy(self, x, t):
         y = self.predict(x)
         y = np.argmax(y, axis=1)
-        if t.ndim != 1: t = np.argmax(t, axis=1)
-
+        if t.ndim != 1:
+            t = np.argmax(t, axis=1)
         accuracy = np.sum(y == t) / float(x.shape[0])
         return accuracy
 
-    def learn(self, input_data, label, learning_rate=0.01):
+    def learn(self, input_data, label, learning_rate=0.1):
         gradient = self.get_gradient(input_data, label)
         for x in range(len(self.model)):
-            update_wei = self.model[x].weights - learning_rate * gradient[x]['weights']
-            update_bia = self.model[x].bias - learning_rate * gradient[x]['bias']
+            update_wei = self.model[x].weights - (learning_rate * gradient[x]['weights'])
+            update_bia = self.model[x].bias - (learning_rate * gradient[x]['bias'])
             self.model[x].set_weights(update_wei, update_bia)
-
-
-
-
