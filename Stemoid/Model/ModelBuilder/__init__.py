@@ -63,9 +63,6 @@ class ModelBuilder:
         accuracy = np.sum(y == t) / float(x.shape[0])
         return accuracy
 
-    def learn(self, input_data, label, learning_rate=0.1):
+    def learn(self, input_data, label):
         gradient = self.get_gradient(input_data, label)
-        for x in range(len(self.model)):
-            update_wei = self.model[x].weights - (learning_rate * gradient[x]['weights'])
-            update_bia = self.model[x].bias - (learning_rate * gradient[x]['bias'])
-            self.model[x].set_weights(update_wei, update_bia)
+        self.optimizer.update(self.model, gradient)
