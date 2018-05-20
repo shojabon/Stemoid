@@ -1,5 +1,5 @@
 class SGD:
-    def __init__(self, lr=0.01):
+    def __init__(self, lr=0.1):
         self.lr = lr
 
     def update(self, model, grads):
