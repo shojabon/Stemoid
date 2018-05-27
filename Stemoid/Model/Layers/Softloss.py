@@ -44,5 +44,4 @@ class SoftLoss:
             dx = self.y.copy()
             dx[np.arange(batch_size), self.t] -= 1
             dx = dx / batch_size
-
         return dx
