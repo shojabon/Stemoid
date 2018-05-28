@@ -16,6 +16,7 @@ class Affine:
 
         self.original_shape = None
         self.input = None
+        self.input_shape = None
 
     def forward(self, input_data):
         self.original_shape = input_data.shape
@@ -41,9 +42,15 @@ class Affine:
         self.weights = weights
         self.bias = bias
 
-    def get_size(self):
+    def get_output_shape(self, input_shape):
+        self.input_shape = input_shape
         return self.size
 
-    def compile(self, first_layer, next_layer):
-        self.weights = 0.1 * np.random.rand(first_layer, next_layer)
-        self.bias = np.zeros(next_layer)
+    def get_size(self):
+        return {'type':'Affine',
+                'size':self.size,
+                'activation':self.ac}
+
+    def compile(self):
+        self.weights = 0.1 * np.random.rand(self.input_shape, self.size)
+        self.bias = np.zeros(self.size)

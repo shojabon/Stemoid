@@ -1,8 +1,7 @@
 class Input:
 
-    def __init__(self, size_shape, activation=None):
+    def __init__(self, size_shape):
         self.size = size_shape
-        self.activation = activation
         pass
 
     def forward(self, x):
@@ -17,13 +16,13 @@ class Input:
         return x
 
     def get_size(self):
-        s = list(self.size)
-        if len(s) == 1:
-            return s[0]
-        return s
+        return {'type': 'Input',
+                'size': self.size}
 
-    def backward(self, dout):
-        return dout
+    def get_output_shape(self):
+        if len(self.size) is 1:
+            return self.size[0]
+        return self.size
 
     def compile(self):
         pass
