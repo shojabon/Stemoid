@@ -22,4 +22,11 @@ model.add(Flatten())
 model.add(Affine(50, activation=ReLU()))
 model.add(Affine(10))
 model.compile()
-print(model.predict(data[0].reshape(1,3,32,32)))
+
+batch_size = 100
+for x in range(20000):
+    batch_mask = np.random.choice(data.shape[0], batch_size)
+    x_batch = data[batch_mask]
+    t_batch = label[batch_mask]
+    model.learn(x_batch, t_batch)
+    print(model.get_accuracy(x_batch, t_batch))

@@ -29,6 +29,10 @@ class Convolution:
         self.doutWeights = None
         self.doutBias = None
 
+    def set_weights(self, weights, bias):
+        self.weights = weights
+        self.bias = bias
+
     def compile(self):
         self.weights = 0.1 * np.random.randn(self.filter_num, self.input_shape[0], self.filter_shape[0], self.filter_shape[0])
         self.bias = 0.1 * np.random.random(self.filter_num)
@@ -47,6 +51,19 @@ class Convolution:
         self.col_weights=col_weights
         return out
 
+    def backward(self, dout):
+        FNumber, C, FHight, FWith = self.weights.shape
+        dout = dout.transpose(0,2,3,1).reshape(-1, FNumber)
+
+        self.doutBias = np.sum(dout, axis=0)
+        self.doutWeights = np.dot(self.col.T, dout)
+        self.doutWeights = self.doutWeights.T.reshape(FNumber, C, FHight, FWith)
+
+        dcol = np.dot(dout, self.col_weights.T)
+        dx = self.col2im(dcol, self.input_data.shape, FHight, FWith, self.stride, self.padding)
+
+        return dx
+
     def im2col(self, input_data, filter_h, filter_w, stride=1, pad=0):
         N, C, H, W = input_data.shape
         out_h = (H + 2 * pad - filter_h) // stride + 1
@@ -64,6 +81,20 @@ class Convolution:
         col = col.transpose(0, 4, 5, 1, 2, 3).reshape(N * out_h * out_w, -1)
         return col
 
+    def col2im(self, col, input_shape, filter_h, filter_w, stride=1, pad=0):
+        N, C, H, W = input_shape
+        out_h = (H + 2 * pad - filter_h) // stride + 1
+        out_w = (W + 2 * pad - filter_w) // stride + 1
+        col = col.reshape(N, out_h, out_w, C, filter_h, filter_w).transpose(0, 3, 4, 5, 1, 2)
+
+        img = np.zeros((N, C, H + 2 * pad + stride - 1, W + 2 * pad + stride - 1))
+        for y in range(filter_h):
+            y_max = y + stride * out_h
+            for x in range(filter_w):
+                x_max = x + stride * out_w
+                img[:, :, y:y_max:stride, x:x_max:stride] += col[:, :, y, x, :, :]
+
+        return img[:, :, pad:H + pad, pad:W + pad]
 
     def get_output_shape(self, input_shape):
         C, H, W = input_shape

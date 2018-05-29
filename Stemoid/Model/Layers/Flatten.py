@@ -3,6 +3,15 @@ class Flatten:
     def __init__(self):
         self.input_shape = None
 
+        self.doutWeights = 0
+        self.doutBias = 0
+
+        self.weights = 0
+        self.bias = 0
+
+    def set_weights(self, weights, bias):
+        pass
+
     def get_size(self):
         return {'type': 'Flatten',
                 'size': self.input_shape}
@@ -18,7 +27,9 @@ class Flatten:
         pass
 
     def forward(self, input_data):
-        return input_data.reshape(1, -1)
+        Num, C, With, Hight = input_data.shape
+        self.input_shape = input_data.shape
+        return input_data.reshape(Num, -1)
 
     def backward(self, dout):
         return dout.reshape(self.input_shape)
