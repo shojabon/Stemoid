@@ -29,13 +29,11 @@ class ModelBuilder:
         for x in range(len(self.model)):
             input_shape = self.model[x].get_output_shape(input_shape)
             self.model_output_shape.append(input_shape)
-        print(self.model_output_shape)
 
 
         self.model_shape.append(self.input.get_size())
         for x in self.model:
             self.model_shape.append(x.get_size())
-        print(self.model_shape)
 
         for x in range(len(self.model_shape) - 1):
             self.model[x].compile()
