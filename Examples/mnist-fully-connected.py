@@ -11,6 +11,7 @@ from dataset.mnist import load_mnist
 
 learning_rate = 0.1
 batch_size = 100
+print(x_train.shape)
 
 model = ModelBuilder()
 model.add(Input((784,)))

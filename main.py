@@ -3,6 +3,7 @@ import numpy as np
 from Stemoid.Model.Activations.ReLU import ReLU
 from Stemoid.Model.Layers.Affine import Affine
 from Stemoid.Model.Layers.Convolution import Convolution
+from Stemoid.Model.Layers.Flatten import Flatten
 from Stemoid.Model.Layers.Input import Input
 from Stemoid.Model.ModelBuilder import ModelBuilder
 from dataset.mnist import load_mnist
@@ -16,7 +17,9 @@ model.add(Convolution(filter_num=16, filter_shape=(2, 2)))
 model.add(Convolution(filter_num=16, filter_shape=(3, 3)))
 model.add(Convolution(filter_num=32, filter_shape=(5, 5)))
 model.add(Convolution(filter_num=64, filter_shape=(10, 10)))
-
+model.add(Convolution(filter_num=128, filter_shape=(16, 16)))
+model.add(Flatten())
+model.add(Affine(50, activation=ReLU()))
+model.add(Affine(10))
 model.compile()
-
-model.predict(data[0])
+print(model.predict(data[0].reshape(1,3,32,32)))
