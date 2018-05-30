@@ -34,8 +34,8 @@ class Convolution:
         self.bias = bias
 
     def compile(self):
-        self.weights = 0.1 * np.random.randn(self.filter_num, self.input_shape[0], self.filter_shape[0], self.filter_shape[0])
-        self.bias = 0.1 * np.random.random(self.filter_num)
+        self.weights = 0.01 * np.random.randn(self.filter_num, self.input_shape[0], self.filter_shape[0], self.filter_shape[0])
+        self.bias = 0.01 * np.random.random(self.filter_num)
 
     def forward(self, input_data):
         FNumber, C, FHight, FWith = self.weights.shape

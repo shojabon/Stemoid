@@ -52,5 +52,5 @@ class Affine:
                 'activation':self.ac}
 
     def compile(self):
-        self.weights = 0.1 * np.random.rand(self.input_shape, self.size)
+        self.weights = 0.01 * np.random.rand(self.input_shape, self.size)
         self.bias = np.zeros(self.size)

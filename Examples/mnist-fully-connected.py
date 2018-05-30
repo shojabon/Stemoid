@@ -9,9 +9,8 @@ from dataset.mnist import load_mnist
 
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
-learning_rate = 0.1
+learning_rate = 0.01
 batch_size = 100
-print(x_train.shape)
 
 model = ModelBuilder()
 model.add(Input((784,)))
