@@ -5,6 +5,7 @@ from Stemoid.Model.Layers.Affine import Affine
 from Stemoid.Model.Layers.Convolution import Convolution
 from Stemoid.Model.Layers.Flatten import Flatten
 from Stemoid.Model.Layers.Input import Input
+from Stemoid.Model.Layers.MaxPooling import MaxPooling
 from Stemoid.Model.ModelBuilder import ModelBuilder
 from Stemoid.Model.Optimizers.AdaGrad import AdaGrad
 from Stemoid.Model.Optimizers.Adam import Adam
@@ -16,7 +17,8 @@ from load_cifar import load_batch
 data, label = load_batch()
 model = ModelBuilder()
 model.add(Input((3, 32, 32)))
-model.add(Convolution(filter_num=30, filter_shape=(5, 5)))
+model.add(Convolution(filter_num=30, filter_shape=(5, 5), padding=-1))
+model.add(MaxPooling(2, 2))
 model.add(Flatten())
 model.add(Affine(50))
 model.add(Affine(10))

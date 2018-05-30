@@ -99,6 +99,9 @@ class Convolution:
     def get_output_shape(self, input_shape):
         C, H, W = input_shape
         self.input_shape = input_shape
+        if self.padding == -1:
+            npadding = (W * self.stride - W + self.filter_shape[1] - self.stride)//2
+            self.padding = npadding
         out_h = (H + 2 * self.padding - self.filter_shape[0]) // self.stride + 1
         out_w = (W + 2 * self.padding - self.filter_shape[1]) // self.stride + 1
         return self.filter_num, out_h, out_w

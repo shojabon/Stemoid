@@ -3,12 +3,6 @@ class Flatten:
     def __init__(self):
         self.input_shape = None
 
-        self.doutWeights = 0
-        self.doutBias = 0
-
-        self.weights = 0
-        self.bias = 0
-
     def set_weights(self, weights, bias):
         pass
 

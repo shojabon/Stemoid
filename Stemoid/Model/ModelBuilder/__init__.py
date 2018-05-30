@@ -10,6 +10,7 @@ class ModelBuilder:
         self.model = []
         self.model_shape = []
         self.model_output_shape = []
+        self.gradient_model = []
         self.input = None
         self.first_done = False
         self.loss = None
@@ -29,11 +30,16 @@ class ModelBuilder:
         for x in range(len(self.model)):
             input_shape = self.model[x].get_output_shape(input_shape)
             self.model_output_shape.append(input_shape)
+        print(self.model_output_shape)
 
 
         self.model_shape.append(self.input.get_size())
         for x in self.model:
             self.model_shape.append(x.get_size())
+
+        for x in range(len(self.model)):
+            if hasattr(self.model[x], 'weights'):
+                self.gradient_model.append(x)
 
         for x in range(len(self.model_shape) - 1):
             self.model[x].compile()
@@ -55,13 +61,13 @@ class ModelBuilder:
         dout = self.loss.backward()
         lista = list(self.model)
         lista.reverse()
-        out = []
+        out = {}
         for x in lista:
             dout = x.backward(dout)
-        for x in lista:
-            out.append({'weights': x.doutWeights,
-                        'bias': x.doutBias})
-        out.reverse()
+        lista.reverse()
+        for x in self.gradient_model:
+            out[x] = {'weights': lista[x].doutWeights,
+                        'bias': lista[x].doutBias}
         return out
 
     def get_accuracy(self, x, t):
@@ -74,4 +80,4 @@ class ModelBuilder:
 
     def learn(self, input_data, label):
         gradient = self.get_gradient(input_data, label)
-        self.optimizer.update(self.model, gradient)
+        self.optimizer.update(self.model, gradient, self.gradient_model)

@@ -11,11 +11,11 @@ class Adam:
         self.m = None
         self.v = None
 
-    def update(self, model, grads):
+    def update(self, model, grads, gradient_model):
         if self.m is None:
             self.m, self.v = {}, {}
             i = 0
-            for x in range(len(model)):
+            for x in gradient_model:
                 self.m[i] = np.zeros_like(model[x].weights, dtype=float)
                 self.v[i] = np.zeros_like(model[x].weights, dtype=float)
                 i += 1
@@ -26,7 +26,7 @@ class Adam:
         self.iter += 1
         lr_t = self.lr * np.sqrt(1.0 - self.beta2 ** self.iter) / (1.0 - self.beta1 ** self.iter)
         ii = 0
-        for x in range(len(model)):
+        for x in gradient_model:
             self.m[ii] += (1 - self.beta1) * (grads[x]['weights'] - self.m[ii])
             self.v[ii] += (1 - self.beta2) * (grads[x]['weights'] ** 2 - self.v[ii])
 
