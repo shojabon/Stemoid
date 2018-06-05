@@ -49,9 +49,13 @@ class Convolution:
         self.input_data = input_data
         self.col = col
         self.col_weights=col_weights
+        if self.activation is not None:
+            return self.activation.forward(out)
         return out
 
     def backward(self, dout):
+        if self.activation is not None:
+            dout = self.activation.backward(dout)
         FNumber, C, FHight, FWith = self.weights.shape
         dout = dout.transpose(0,2,3,1).reshape(-1, FNumber)
 

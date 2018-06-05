@@ -30,14 +30,13 @@ class Adam:
             self.m[ii] += (1 - self.beta1) * (grads[x]['weights'] - self.m[ii])
             self.v[ii] += (1 - self.beta2) * (grads[x]['weights'] ** 2 - self.v[ii])
 
-            new_weights = model[x].weights - lr_t * self.m[ii] / (np.sqrt(self.v[ii]) + 1e-7)
+            model[x].weights -= lr_t * self.m[ii] / (np.sqrt(self.v[ii]) + 1e-7)
 
             ii += 1
 
             self.m[ii] += (1 - self.beta1) * (grads[x]['bias'] - self.m[ii])
             self.v[ii] += (1 - self.beta2) * (grads[x]['bias'] ** 2 - self.v[ii])
 
-            new_bias = model[x].bias - lr_t * self.m[ii] / (np.sqrt(self.v[ii]) + 1e-7)
+            model[x].bias -= lr_t * self.m[ii] / (np.sqrt(self.v[ii]) + 1e-7)
 
             ii += 1
-            model[x].set_weights(new_weights, new_bias)

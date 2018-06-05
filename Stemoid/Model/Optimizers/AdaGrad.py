@@ -19,9 +19,8 @@ class AdaGrad:
         ii = 0
         for x in gradient_model:
             self.h[ii] += grads[x]['weights'] * grads[x]['weights']
-            new_weights = model[x].weights - self.lr * grads[x]['weights'] / (np.sqrt(self.h[ii]) + 1e-7)
+            model[x].weights -= self.lr * grads[x]['weights'] / (np.sqrt(self.h[ii]) + 1e-7)
             ii += 1
             self.h[ii] += grads[x]['bias'] * grads[x]['bias']
-            new_bias = model[x].bias - self.lr * grads[x]['bias'] / (np.sqrt(self.h[ii]) + 1e-7)
+            model[x].bias -= self.lr * grads[x]['bias'] / (np.sqrt(self.h[ii]) + 1e-7)
             ii += 1
-            model[x].set_weights(new_weights, new_bias)
