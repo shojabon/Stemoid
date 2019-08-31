@@ -3,6 +3,10 @@
 
 #ランダムなテストデータから学習したモデルを使って推測
 #Use Random Test Data And Predict The Answer Using The Model That Was Just Trainned
+import sys, pathlib
+current_dir = pathlib.Path(__file__).resolve().parent
+# モジュールのあるパスを追加
+sys.path.append( str(current_dir) + '/../' )
 import random
 
 from Stemoid.Model.Activations.ReLU import ReLU

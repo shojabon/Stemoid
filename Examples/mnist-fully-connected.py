@@ -1,6 +1,11 @@
 #全統合層とドロップアウト層でmnistデータを学習
 #Learn mnist Data With Fully-Connected Layers And Dropout Layers
 
+import sys, pathlib
+current_dir = pathlib.Path(__file__).resolve().parent
+# モジュールのあるパスを追加
+sys.path.append( str(current_dir) + '/../' )
+
 from Stemoid.Model.Activations.ReLU import ReLU
 from Stemoid.Model.Layers.Affine import Affine
 from Stemoid.Model.Layers.Dropout import Dropout
@@ -28,4 +33,3 @@ model.execute_learning_session(training_question=x_train,
                                batch_size=128,
                                epoch=2,
                                validation_data=(x_test,t_test))
-

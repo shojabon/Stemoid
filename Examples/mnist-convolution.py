@@ -1,3 +1,8 @@
+import sys, pathlib
+current_dir = pathlib.Path(__file__).resolve().parent
+# モジュールのあるパスを追加
+sys.path.append( str(current_dir) + '/../' )
+
 import numpy as np
 
 #畳み込みレイヤーを使ったモデルでmnistデータを学習
