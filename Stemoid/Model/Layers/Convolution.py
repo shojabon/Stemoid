@@ -1,6 +1,9 @@
 import numpy as np
 
 
+#畳み込み層
+#Convolution Layer
+
 class Error(Exception):
     pass
 class Convolution:
@@ -19,9 +22,12 @@ class Convolution:
         self.activation = activation
         self.input_shape = None
 
+        #       レイヤーパラメーター
+        #       Variables
         self.weights = None
         self.bias = None
-
+        #       入力データ記録
+        #       Records Of Input Data
         self.input_data = None
         self.col = None
         self.col_weights = None
@@ -37,6 +43,8 @@ class Convolution:
         self.weights = 0.01 * np.random.randn(self.filter_num, self.input_shape[0], self.filter_shape[0], self.filter_shape[0])
         self.bias = 0.01 * np.random.random(self.filter_num)
 
+# 　 前方計算処理関数
+#   Forward Propagate Function
     def forward(self, input_data):
         FNumber, C, FHight, FWith = self.weights.shape
         N, C, H, W = input_data.shape
@@ -53,6 +61,8 @@ class Convolution:
             return self.activation.forward(out)
         return out
 
+#   逆転伝播計算関数
+#   Back Propagation Calculation Function
     def backward(self, dout):
         if self.activation is not None:
             dout = self.activation.backward(dout)
@@ -68,6 +78,8 @@ class Convolution:
 
         return dx
 
+    #画像から処理しやすいように小型行列に変換
+    #Convert Image To Matrix For Easier Calculation
     def im2col(self, input_data, filter_h, filter_w, stride=1, pad=0):
         N, C, H, W = input_data.shape
         out_h = (H + 2 * pad - filter_h) // stride + 1
@@ -85,6 +97,8 @@ class Convolution:
         col = col.transpose(0, 4, 5, 1, 2, 3).reshape(N * out_h * out_w, -1)
         return col
 
+    #処理された行列から画像に変換
+    #Convert Matrix To Image
     def col2im(self, col, input_shape, filter_h, filter_w, stride=1, pad=0):
         N, C, H, W = input_shape
         out_h = (H + 2 * pad - filter_h) // stride + 1
@@ -100,6 +114,8 @@ class Convolution:
 
         return img[:, :, pad:H + pad, pad:W + pad]
 
+    #出力型取得
+    #Get Output Shape
     def get_output_shape(self, input_shape):
         C, H, W = input_shape
         self.input_shape = input_shape

@@ -1,6 +1,7 @@
 import numpy as np
 
-
+#最大損失関数レイヤー
+#SoftLoss Function Layer
 
 class SoftLoss:
     def __init__(self):
@@ -19,6 +20,9 @@ class SoftLoss:
         batch_size = y.shape[0]
         return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
 
+    #最大値をOne-Hot-Vectorに変換
+    #Convert Maximum Value To One-Hot-Vector
+
     def softmax(self, x):
         if x.ndim == 2:
             x = x.T
@@ -29,6 +33,8 @@ class SoftLoss:
         x = x - np.max(x)
         return np.exp(x) / np.sum(np.exp(x))
 
+    # 　 前方計算処理関数
+    #   Forward Propagate Function
     def forward(self, x, t):
         self.t = t
         self.y = self.softmax(x)
@@ -36,6 +42,8 @@ class SoftLoss:
 
         return self.loss
 
+    #   逆転伝播計算関数
+    #   Back Propagation Calculation Function
     def backward(self, dout=1):
         batch_size = self.t.shape[0]
         if self.t.size == self.y.size:

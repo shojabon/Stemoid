@@ -1,18 +1,26 @@
 import numpy as np
 
+#最大値圧縮層
+#Max Pooling Layer
 
 class MaxPooling:
     def __init__(self, pool_hight, pool_with, stride=1, pad=0):
+        #       レイヤーパラメーター
+        #       Variables
         self.pool_h = pool_hight
         self.pool_w = pool_with
         self.stride = stride
         self.padding = pad
 
+        #       入力データ記録
+        #       Records Of Input Data
         self.x = None
         self.arg_max = None
 
         self.input_shape = None
 
+    #画像から処理しやすいように小型行列に変換
+    #Convert Image To Matrix For Easier Calculation
     def im2col(self, input_data, filter_h, filter_w, stride=1, pad=0):
         N, C, H, W = input_data.shape
         out_h = (H + 2 * pad - filter_h) // stride + 1
@@ -29,7 +37,8 @@ class MaxPooling:
 
         col = col.transpose(0, 4, 5, 1, 2, 3).reshape(N * out_h * out_w, -1)
         return col
-
+    #処理された行列から画像に変換
+    #Convert Matrix To Image
     def col2im(self, col, input_shape, filter_h, filter_w, stride=1, pad=0):
         N, C, H, W = input_shape
         out_h = (H + 2 * pad - filter_h) // stride + 1
@@ -45,6 +54,8 @@ class MaxPooling:
 
         return img[:, :, pad:H + pad, pad:W + pad]
 
+    # 　 前方計算処理関数
+    #   Forward Propagate Function
     def forward(self, input_data):
         N, C, H, W = input_data.shape
         out_h = int(1 + (H - self.pool_h) / self.stride)
@@ -62,6 +73,8 @@ class MaxPooling:
 
         return out
 
+    #   逆転伝播計算関数
+    #   Back Propagation Calculation Function
     def backward(self, dout):
         dout = dout.transpose(0, 2, 3, 1)
 
@@ -74,7 +87,8 @@ class MaxPooling:
         dx = self.col2im(dcol, self.x.shape, self.pool_h, self.pool_w, self.stride, self.padding)
 
         return dx
-
+    #出力型取得
+    #Get Output Shape
     def get_output_shape(self, input_shape):
         C, H, W = input_shape
         self.input_shape = input_shape
